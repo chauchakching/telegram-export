@@ -129,6 +129,8 @@ class Dumper:
                       "Secret INT,"
                       # Whatever else as JSON here
                       "Extra TEXT,"
+                      # Custom url to store the media
+                      "Url TEXT,"
                       "FOREIGN KEY (ThumbnailID) REFERENCES Media(ID))")
 
             c.execute("CREATE TABLE User("
@@ -664,7 +666,7 @@ class Dumper:
                 row['name'], row['mime_type'], row['size'],
                 row['thumbnail_id'], row['type'],
                 row['local_id'], row['volume_id'], row['secret'],
-                row['extra']
+                row['extra'], None
             ))
 
     def dump_forward(self, forward):

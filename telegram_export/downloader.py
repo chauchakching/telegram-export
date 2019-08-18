@@ -218,7 +218,7 @@ class Downloader:
     async def _download_media(self, media_id, context_id, sender_id, date,
                               bar):
         media_row = self.dumper.conn.execute(
-            'SELECT LocalID, VolumeID, Secret, Type, MimeType, Name, Size '
+            'SELECT LocalID, VolumeID, Secret, Type, MimeType, Name, Size, Url '
             'FROM Media WHERE ID = ?', (media_id,)
         ).fetchone()
         # Documents have attributes and they're saved under the "document"
@@ -260,6 +260,11 @@ class Downloader:
         filename += '.{}{}'.format(media_id, ext)
         if os.path.isfile(filename):
             __log__.debug('Skipping already-existing file %s', filename)
+            return
+
+        url = media_row[7]
+        if url:
+            __log__.debug('Skipping file %s already stored in url %s', filename, url)
             return
 
         __log__.debug('Downloading to %s', filename)
